@@ -1,0 +1,6 @@
+# Cloudflare Pages Redirects & API Proxy
+# Route API requests to the live backend server
+/api/*  https://ais-pre-hx3yn6m4vk36uefkcgagy6-163731668725.asia-southeast1.run.app/api/:splat  200
+
+# SPA fallback routing for client-side React routes
+/*  /index.html  200

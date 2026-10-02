@@ -1,0 +1,80 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Registered patient or user account",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique Firebase Auth user ID" },
+        "email": { "type": "string", "format": "email", "description": "User email address" },
+        "displayName": { "type": "string", "description": "User full name" },
+        "phone": { "type": "string", "description": "User phone number" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Account registration timestamp" }
+      },
+      "required": ["uid", "email"]
+    },
+    "DiagnosisRecord": {
+      "title": "DiagnosisRecord",
+      "description": "AI-generated Ayurvedic and clinical diagnosis assessment",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Diagnosis record unique ID" },
+        "userId": { "type": "string", "description": "Optional patient user ID" },
+        "category": { "type": "string", "description": "Health issue category (piles_sitting, mental_health, hair_growth, general)" },
+        "symptoms": { "type": "string", "description": "Reported patient symptoms" },
+        "severity": { "type": "string", "description": "Reported severity level" },
+        "primaryCondition": { "type": "string", "description": "Diagnosed condition name in English" },
+        "primaryConditionHindi": { "type": "string", "description": "Diagnosed condition in Hindi" },
+        "confidenceScore": { "type": "number", "description": "AI model confidence score" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when assessment was performed" }
+      },
+      "required": ["id", "category", "symptoms", "primaryCondition"]
+    },
+    "OrderRecord": {
+      "title": "OrderRecord",
+      "description": "Ayurvedic kit or ergonomic product purchase order",
+      "type": "object",
+      "properties": {
+        "orderId": { "type": "string", "description": "Unique order identifier" },
+        "userId": { "type": "string", "description": "Optional customer UID" },
+        "items": { "type": "array", "description": "List of ordered remedy kit items" },
+        "totalAmount": { "type": "number", "description": "Total payment amount in INR" },
+        "paymentMethod": { "type": "string", "description": "COD, UPI or Card" },
+        "status": { "type": "string", "description": "Order processing status" },
+        "trackingNumber": { "type": "string", "description": "Postal courier tracking number" },
+        "shippingAddress": { "type": "object", "description": "Delivery address and recipient phone" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Order placement timestamp" }
+      },
+      "required": ["orderId", "totalAmount", "status"]
+    },
+    "NewsletterSubscription": {
+      "title": "NewsletterSubscription",
+      "description": "Subscriber to Chotelal Ji Health wellness updates and remedies",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email", "description": "Subscriber email address" },
+        "subscribedAt": { "type": "string", "format": "date-time", "description": "Subscription timestamp" },
+        "source": { "type": "string", "description": "Signup source page" }
+      },
+      "required": ["email"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Stores user profiles"
+    },
+    "/diagnoses/{diagnosisId}": {
+      "schema": { "$ref": "#/entities/DiagnosisRecord" },
+      "description": "Stores AI health diagnosis assessments"
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/OrderRecord" },
+      "description": "Stores remedy kit customer orders"
+    },
+    "/newsletter/{newsletterId}": {
+      "schema": { "$ref": "#/entities/NewsletterSubscription" },
+      "description": "Stores newsletter subscription emails"
+    }
+  }
+}

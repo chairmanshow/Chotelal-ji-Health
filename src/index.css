@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+:root {
+  --bg-pure-white: #FFFFFF;
+  --bg-soft-gray: #F8FAFC;
+  --chotelal-orange: #FF9933;
+  --chotelal-orange-hover: #EA580C;
+  --sky-blue: #0EA5E9;
+  --text-primary: #1E293B;
+  --text-secondary: #64748B;
+  --border-light: #E2E8F0;
+}
+
+html, body {
+  background-color: #FFFFFF;
+  color: #1E293B;
+  scroll-behavior: smooth;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Card helpers for clean white theme */
+.chotelal-card {
+  background-color: #FFFFFF;
+  border-radius: 1rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+}
+.chotelal-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+}
+
+/* Primary orange buttons */
+.btn-chotelal {
+  background-color: #FF9933;
+  color: #FFFFFF;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  transition: all 0.2s ease-in-out;
+}
+.btn-chotelal:hover {
+  background-color: #EA580C;
+}
+
+/* Custom scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -1,0 +1,21 @@
+name = "chotelalji"
+main = "worker.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# Cloudflare Pages / Workers project configuration
+# Primary worker target: https://chotelalji.sumitshrivas24.workers.dev/
+
+[vars]
+PROJECT_NAME = "chotelalji"
+ENVIRONMENT = "production"
+APP_NAME = "Chotelal ji Health"
+FRONTEND_URL = "https://leafy-freedom-kwh4c.web.app"
+CORS_ORIGIN = "*"
+
+# Node & Pages compatibility
+[build]
+command = "npm run pages:build"
+
+[site]
+bucket = "./dist"

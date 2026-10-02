@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all unknown access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // 1. Users collection
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId)
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 256;
+      allow delete: if false;
+    }
+
+    // 2. Diagnoses collection
+    match /diagnoses/{diagnosisId} {
+      allow read: if isSignedIn() && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.isPublic == true
+      );
+      allow create: if (
+        request.resource.data.category is string &&
+        request.resource.data.primaryCondition is string &&
+        request.resource.data.category.size() <= 64 &&
+        request.resource.data.primaryCondition.size() <= 256
+      );
+      allow update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+
+    // 3. Orders collection
+    match /orders/{orderId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if (
+        request.resource.data.totalAmount is number &&
+        request.resource.data.totalAmount >= 0 &&
+        request.resource.data.status is string
+      );
+      allow update, delete: if false;
+    }
+
+    // 4. Newsletter collection
+    match /newsletter/{newsletterId} {
+      allow create: if (
+        request.resource.data.email is string &&
+        request.resource.data.email.size() > 3 &&
+        request.resource.data.email.size() <= 256 &&
+        request.resource.data.email.matches('^[^@]+@[^@]+\\.[^@]+$')
+      );
+      allow read, update, delete: if false;
+    }
+  }
+}

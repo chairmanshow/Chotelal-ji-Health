@@ -1,0 +1,12 @@
+{
+  "projectId": "chotelalji-health",
+  "appId": "1:910297519409:web:78d5c3e013863c0fbfcc10",
+  "apiKey": "AIzaSyCUvft4xiVYfAXCocFwK_n6VIN44kUVn34",
+  "authDomain": "chotelalji-health.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "chotelalji-health.firebasestorage.app",
+  "messagingSenderId": "910297519409",
+  "measurementId": "",
+  "oAuthClientId": "",
+  "recaptchaSiteKey": ""
+}
