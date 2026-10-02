@@ -1245,7 +1245,7 @@ Always return your answer in this exact JSON format:
 
 Perform a clinical Ayurvedic analysis. Formulate personalized herbal remedies with exact dosages, classical treatments, yoga poses, dietary rules, and verified citations from the classical texts provided.`;
 
-    const candidateModels = ['gemini-flash-latest', 'gemini-3.8-flash', 'gemini-3.1-flash-lite'];
+    const candidateModels = ['gemini-3.1-flash-lite', 'gemini-flash-latest', 'gemini-3.8-flash'];
     let parsed: any = null;
 
     for (const modelName of candidateModels) {
@@ -1511,7 +1511,7 @@ Provide a comprehensive, accurate, empathetic diagnosis and 3-tier treatment pla
     }
 
     // Model candidates: prioritize fast available models
-    const candidateModels = ['gemini-flash-latest', 'gemini-3.8-flash', 'gemini-3.1-flash-lite'];
+    const candidateModels = ['gemini-3.1-flash-lite', 'gemini-flash-latest', 'gemini-3.8-flash'];
     let parsed: any = null;
 
     for (const modelName of candidateModels) {

@@ -1,18 +1,32 @@
 /**
- * Cloudflare Worker Backend for Chotelal ji Health
- * Deployment target: https://chotelalji.sumitshrivas24.workers.dev/
- * Powered by Google Gemini 3.1 Flash Lite
+ * ==============================================================================
+ * CHOTELAL JI HEALTH — UNIFIED CLOUDFLARE WORKER (ALL-IN-ONE)
+ * ==============================================================================
+ * 
+ * Powered by Google Gemini 3.1 Flash Lite:
+ * https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent
+ * 
+ * Supported Endpoints:
+ * - POST /api/chat          -> 3-Step Ayurvedic Q&A with Chotelal Ji & Video Recommendation
+ * - POST /api/ai-diagnose   -> Comprehensive Ayurvedic Diagnosis & Classical Prescription
+ * - POST /api/diagnose      -> Alias for /api/ai-diagnose
+ * - POST /api/tts           -> High-Fidelity Neural TTS (hi-IN-MadhurNeural, fast & warm)
+ * - GET  /api/tts           -> TTS endpoint supporting query param ?text=...
+ * - GET  /health or /       -> Service Health Check
+ * - POST /api/newsletter/subscribe
+ * - POST /api/consultation/book
+ * - POST /api/orders/create
+ * 
+ * Deployment: Cloudflare Workers Dashboard -> Quick Edit -> Paste & Save and Deploy
+ * Environment Variables (Settings -> Variables):
+ * - GEMINI_API_KEY (Your Google AI Studio API Key)
+ * ==============================================================================
  */
-
-export interface Env {
-  GEMINI_API_KEY?: string;
-  PROJECT_NAME?: string;
-  ENVIRONMENT?: string;
-}
 
 const GEMINI_MODEL = 'gemini-3.1-flash-lite';
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
+// Microsoft Edge Neural Voice for Chotelal Ji
 const TTS_VOICE = 'hi-IN-MadhurNeural';
 const TTS_RATE = '+10%';
 const TTS_PITCH = '-2Hz';
@@ -24,7 +38,7 @@ const CORS_HEADERS = {
   'Access-Control-Max-Age': '86400',
 };
 
-function jsonResponse(data: any, status = 200) {
+function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
     headers: {
@@ -35,18 +49,10 @@ function jsonResponse(data: any, status = 200) {
 }
 
 // Trusted Patanjali / Swami Ramdev YouTube Video Mapping
-function getRecommendedVideo(symptoms: string = '', category: string = '') {
+function getRecommendedVideo(symptoms = '', category = '') {
   const text = `${symptoms} ${category}`.toLowerCase();
 
-  if (
-    text.includes('pile') ||
-    text.includes('bawasir') ||
-    text.includes('fissure') ||
-    text.includes('kabz') ||
-    text.includes('constipation') ||
-    text.includes('masse') ||
-    text.includes('sitting')
-  ) {
+  if (text.includes('pile') || text.includes('bawasir') || text.includes('fissure') || text.includes('kabz') || text.includes('constipation') || text.includes('masse') || text.includes('sitting')) {
     return {
       videoId: 'B0Y21k3k8W8',
       title: 'बवासीर, भगंदर, फिशर का पक्का आयुर्वेदिक व योगाभ्यास इलाज | Swami Ramdev',
@@ -57,14 +63,7 @@ function getRecommendedVideo(symptoms: string = '', category: string = '') {
     };
   }
 
-  if (
-    text.includes('hair') ||
-    text.includes('baal') ||
-    text.includes('dandruff') ||
-    text.includes('rusi') ||
-    text.includes('bald') ||
-    text.includes('khujli')
-  ) {
+  if (text.includes('hair') || text.includes('baal') || text.includes('dandruff') || text.includes('rusi') || text.includes('bald') || text.includes('khujli')) {
     return {
       videoId: 'Q_0g_5iK4Qk',
       title: 'बालों का झड़ना तुरंत रोकें, नए बाल उगाएं — भृंगराज व आंवला प्रयोग | Acharya Balkrishna',
@@ -75,14 +74,7 @@ function getRecommendedVideo(symptoms: string = '', category: string = '') {
     };
   }
 
-  if (
-    text.includes('gas') ||
-    text.includes('acidity') ||
-    text.includes('pet') ||
-    text.includes('apach') ||
-    text.includes('dakar') ||
-    text.includes('bloat')
-  ) {
+  if (text.includes('gas') || text.includes('acidity') || text.includes('pet') || text.includes('apach') || text.includes('dakar') || text.includes('bloat')) {
     return {
       videoId: '1X1RkKxOeqM',
       title: 'गैस, एसिडिटी, कब्ज और पेट दर्द का 5 मिनट में रामबाण इलाज | Swami Ramdev',
@@ -93,14 +85,7 @@ function getRecommendedVideo(symptoms: string = '', category: string = '') {
     };
   }
 
-  if (
-    text.includes('stress') ||
-    text.includes('tanaav') ||
-    text.includes('neend') ||
-    text.includes('chinta') ||
-    text.includes('anxiety') ||
-    text.includes('insomnia')
-  ) {
+  if (text.includes('stress') || text.includes('tanaav') || text.includes('neend') || text.includes('chinta') || text.includes('anxiety') || text.includes('insomnia')) {
     return {
       videoId: 'L_X9v_rV_Qk',
       title: 'मानसिक तनाव, अनिद्रा और डिप्रेशन से मुक्ति — 3 चमत्कारी प्राणायाम | Swami Ramdev',
@@ -111,14 +96,7 @@ function getRecommendedVideo(symptoms: string = '', category: string = '') {
     };
   }
 
-  if (
-    text.includes('dard') ||
-    text.includes('pain') ||
-    text.includes('ghutna') ||
-    text.includes('kamar') ||
-    text.includes('joint') ||
-    text.includes('gathiya')
-  ) {
+  if (text.includes('dard') || text.includes('pain') || text.includes('ghutna') || text.includes('kamar') || text.includes('joint') || text.includes('gathiya')) {
     return {
       videoId: 'M7qQ9X4Q0aM',
       title: 'जोड़ों व घुटनों का दर्द, गठिया और वात रोग का संपूर्ण समाधान | Swami Ramdev',
@@ -140,10 +118,10 @@ function getRecommendedVideo(symptoms: string = '', category: string = '') {
 }
 
 export default {
-  async fetch(request: Request, env: Env, ctx: any): Promise<Response> {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    // 1. CORS Preflight
+    // 1. Handle CORS Preflight for all endpoints
     if (request.method === 'OPTIONS') {
       return new Response(null, {
         status: 204,
@@ -151,21 +129,21 @@ export default {
       });
     }
 
-    const apiKey = env.GEMINI_API_KEY || (typeof process !== 'undefined' ? process.env?.GEMINI_API_KEY : '') || '';
+    const apiKey = env.GEMINI_API_KEY || '';
 
-    // 2. Health check / Root
+    // 2. Health Check / Root
     if (url.pathname === '/' || url.pathname === '/health') {
       return jsonResponse({
         status: 'online',
-        service: 'Chotelal ji Health Backend API',
+        service: 'Chotelal Ji Health AI Vaidya Backend',
         model: GEMINI_MODEL,
-        provider: 'Google Gemini 3.1 Flash Lite',
+        provider: 'Google Gemini 3.1 Flash Lite (Free Tier 500 req/day)',
         endpoints: ['/api/chat', '/api/ai-diagnose', '/api/diagnose', '/api/tts'],
         timestamp: new Date().toISOString(),
       });
     }
 
-    // 3. TTS Endpoint (Microsoft Edge Neural Voice: hi-IN-MadhurNeural)
+    // 3. TTS Endpoint (Edge Neural Voice: hi-IN-MadhurNeural)
     if (url.pathname === '/api/tts') {
       try {
         let text = '';
@@ -174,22 +152,23 @@ export default {
         let voice = TTS_VOICE;
 
         if (request.method === 'POST') {
-          const body: any = await request.json().catch(() => ({}));
+          const body = await request.json().catch(() => ({}));
           text = body.text || '';
           if (body.rate) rate = body.rate;
           if (body.pitch) pitch = body.pitch;
           if (body.voice) voice = body.voice;
         } else if (request.method === 'GET') {
           text = url.searchParams.get('text') || '';
-          if (url.searchParams.get('rate')) rate = url.searchParams.get('rate') || rate;
-          if (url.searchParams.get('pitch')) pitch = url.searchParams.get('pitch') || pitch;
-          if (url.searchParams.get('voice')) voice = url.searchParams.get('voice') || voice;
+          if (url.searchParams.get('rate')) rate = url.searchParams.get('rate');
+          if (url.searchParams.get('pitch')) pitch = url.searchParams.get('pitch');
+          if (url.searchParams.get('voice')) voice = url.searchParams.get('voice');
         }
 
         if (!text || typeof text !== 'string' || !text.trim()) {
           return jsonResponse({ error: 'Valid text is required for TTS' }, 400);
         }
 
+        // Clean markdown and special symbols
         const cleanText = text
           .replace(/[*#_`]/g, '')
           .replace(/&/g, '&amp;')
@@ -234,15 +213,15 @@ export default {
             ...CORS_HEADERS,
           },
         });
-      } catch (err: any) {
-        return jsonResponse({ error: err?.message || 'TTS Error' }, 500);
+      } catch (err) {
+        return jsonResponse({ error: err.message || 'TTS Error' }, 500);
       }
     }
 
-    // 4. Chat with Chotelal Ji (/api/chat) using gemini-3.1-flash-lite
+    // 4. Chatbot Endpoint (/api/chat) with 3-Step Q&A & gemini-3.1-flash-lite
     if (url.pathname === '/api/chat' && request.method === 'POST') {
       try {
-        const body: any = await request.json().catch(() => ({}));
+        const body = await request.json().catch(() => ({}));
         const {
           message = '',
           history = [],
@@ -254,6 +233,7 @@ export default {
         const recommendedVideo = getRecommendedVideo(message, currentDiagnosisContext?.category || '');
 
         if (!apiKey) {
+          // Resilient fallback when API key is missing
           if (step === 1) {
             return jsonResponse({
               reply: 'Haan beta, maine aapki takleef suni. Ye batao ki kitne din se ye pareshani hai, aur kya dard ya jalan zyada rehti hai?',
@@ -294,6 +274,7 @@ export default {
           });
         }
 
+        // Call Gemini 3.1 Flash Lite
         const systemInstruction = `You are 'Chotelal Ji' (छोटेलाल जी) — a highly revered, compassionate 30-year experienced Ayurvedic Vaidya from 'Chotelal ji Health'.
 You speak in warm, grandfatherly, respectful Hindi/Hinglish ("नमस्ते बेटा", "घबराओ मत मेरे बच्चे").
 You operate in a STRICT 3-STEP CONSULTATION FLOW:
@@ -321,7 +302,7 @@ Always return strict JSON:
 }`;
 
         const contents = [
-          ...history.map((h: any) => ({
+          ...history.map((h) => ({
             role: h.sender === 'user' ? 'user' : 'model',
             parts: [{ text: h.text }],
           })),
@@ -345,7 +326,7 @@ Always return strict JSON:
         });
 
         if (geminiRes.ok) {
-          const data: any = await geminiRes.json();
+          const data = await geminiRes.json();
           const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
           if (text) {
             const parsed = JSON.parse(text);
@@ -356,24 +337,25 @@ Always return strict JSON:
           }
         }
 
+        // Fallback if Gemini returned empty
         return jsonResponse({
           reply: 'नमस्ते बेटा! आपकी बात मैंने ध्यान से समझी। गुनगुना पानी पिएं, पेट साफ रखें और हल्का सात्विक खाना खाएं। अपना ख्याल रखना बेटा।',
           stage: 'question',
           isFinalDiagnosis: false,
           questionNumber: step,
         });
-      } catch (err: any) {
-        return jsonResponse({ error: 'Chat processing error', details: err?.message }, 500);
+      } catch (err) {
+        return jsonResponse({ error: 'Chat processing error', details: err.message }, 500);
       }
     }
 
-    // 5. Dynamic Diagnosis Endpoint (/api/ai-diagnose or /api/diagnose) using gemini-3.1-flash-lite
+    // 5. AI Diagnosis Endpoint (/api/ai-diagnose & /api/diagnose) with gemini-3.1-flash-lite
     if (
       (url.pathname === '/api/ai-diagnose' || url.pathname === '/api/diagnose') &&
       request.method === 'POST'
     ) {
       try {
-        const body: any = await request.json().catch(() => ({}));
+        const body = await request.json().catch(() => ({}));
         const {
           category = 'general',
           symptoms = '',
@@ -430,7 +412,7 @@ Return ONLY JSON with this schema:
             });
 
             if (geminiRes.ok) {
-              const data: any = await geminiRes.json();
+              const data = await geminiRes.json();
               const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
               if (text) {
                 const parsed = JSON.parse(text);
@@ -445,6 +427,7 @@ Return ONLY JSON with this schema:
           }
         }
 
+        // Resilient Fallback
         const diagId = `CHL-${Date.now().toString().slice(-6)}`;
         return jsonResponse({
           id: `diag-${Date.now()}`,
@@ -453,9 +436,9 @@ Return ONLY JSON with this schema:
           diagnosis: 'अर्श व त्रिदोष असंतुलन (Arsha / Hemorrhoids & Pelvic Congestion)',
           ayurvedicType: 'अपान वात व पित्त-रक्त प्रकोप (Vata-Pitta Pradhan)',
           herbal_remedies: [
-            'त्रिफला गुग्गुलु (Triphala Guggulu) — 2 गोली रात को गुनगुने पानी के साथ।',
-            'अभयारिष्ट (Abhayarishta) — 15ml बराबर पानी मिलाकर भोजन के बाद 2 बार लें।',
-            'जात्यादि तैलम (Jatyadi Tailam) — शौच के बाद हल्के हाथ से 2-3 बूंद लगाएं।',
+            'त्रिफला गुग्गुलु (Triphala Guggulu) — 2 गोली रात को गुनगुने पानी के साथ। आंतों की स्वाभाविक गति बहाल कर कब्ज खत्म करता है।',
+            'अभयारिष्ट (Abhayarishta) — 15ml बराबर पानी मिलाकर भोजन के बाद दिन में 2 बार लें।',
+            'जात्यादि तैलम (Jatyadi Tailam) — शौच के बाद हल्के हाथ से गुदा द्वार पर 2-3 बूंद लगाएं।',
           ],
           ayurvedic_treatment: [
             'औषधीय सिट्ज बाथ (Sitz Bath) — गुनगुने पानी के टब में 15 मिनट बैठें।',
@@ -479,8 +462,8 @@ Return ONLY JSON with this schema:
           warning: 'यह परामर्श शास्त्रीय आयुर्वेद पर आधारित है। तीव्र रक्तस्राव में चिकित्सक से मिलें।',
           recommendedVideo,
         });
-      } catch (err: any) {
-        return jsonResponse({ error: 'Diagnosis failed', details: err?.message }, 500);
+      } catch (err) {
+        return jsonResponse({ error: 'Diagnosis failed', details: err.message }, 500);
       }
     }
 
@@ -489,14 +472,14 @@ Return ONLY JSON with this schema:
       const { email } = await request.json().catch(() => ({}));
       return jsonResponse({
         success: true,
-        message: 'Subscribed to Chotelal ji Health newsletter successfully via Cloudflare Workers.',
+        message: 'Subscribed to Chotelal Ji Health successfully via Cloudflare Workers.',
         email,
       });
     }
 
     // 7. Consultation Booking
     if (url.pathname === '/api/consultation/book' && request.method === 'POST') {
-      const body: any = await request.json().catch(() => ({}));
+      const body = await request.json().catch(() => ({}));
       const bookingId = 'CHOTE-' + Math.floor(100000 + Math.random() * 900000);
       return jsonResponse({
         success: true,
@@ -508,9 +491,9 @@ Return ONLY JSON with this schema:
       });
     }
 
-    // 8. Orders
+    // 8. Order Creation
     if (url.pathname === '/api/orders/create' && request.method === 'POST') {
-      const body: any = await request.json().catch(() => ({}));
+      const body = await request.json().catch(() => ({}));
       const orderId = 'ORD-' + Date.now().toString().slice(-6);
       return jsonResponse({
         success: true,
@@ -520,6 +503,7 @@ Return ONLY JSON with this schema:
       });
     }
 
-    return jsonResponse({ error: 'Not Found', pathname: url.pathname }, 404);
+    // 9. 404 for unknown endpoints
+    return jsonResponse({ error: 'Endpoint Not Found', pathname: url.pathname }, 404);
   },
 };
