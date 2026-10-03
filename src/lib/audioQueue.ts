@@ -11,6 +11,8 @@ export interface AudioQueueItem {
   onError?: (err: any) => void;
 }
 
+import { fetchWithFallback } from './api-config';
+
 class ChotelalAudioQueueSystem {
   private queue: AudioQueueItem[] = [];
   private currentItem: AudioQueueItem | null = null;
@@ -168,7 +170,7 @@ class ChotelalAudioQueueSystem {
    * Fetch audio from /api/tts using Microsoft Edge Neural Voice
    */
   private async fetchNeuralTts(text: string): Promise<string> {
-    const response = await fetch('/api/tts', {
+    const response = await fetchWithFallback('/api/tts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text, rate: '+8%', pitch: '-1Hz' }),

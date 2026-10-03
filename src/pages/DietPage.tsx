@@ -26,6 +26,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { playChotelalVoice, stopChotelalVoice, subscribeVoiceStatus } from '../lib/chotelalVoice';
+import { fetchWithFallback } from '../lib/api-config';
 
 interface MealSectionData {
   time: string;
@@ -97,7 +98,7 @@ export const DietPage: React.FC = () => {
     stopChotelalVoice();
 
     try {
-      const response = await fetch('/api/diet/generate', {
+      const response = await fetchWithFallback('https://chotelalji-tts.sumitshrivas24.workers.dev/api/diet/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

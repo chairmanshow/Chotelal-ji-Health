@@ -211,7 +211,7 @@ export const ChotelalChatModal: React.FC<ChotelalChatModalProps> = ({
       let data: any = null;
 
       try {
-        const response = await fetch('/api/chat', {
+        const response = await fetch('https://chotelalji-tts.sumitshrivas24.workers.dev/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -539,7 +539,7 @@ export const ChotelalChatModal: React.FC<ChotelalChatModalProps> = ({
                           className="inline-flex items-center gap-1.5 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs px-3.5 py-2 rounded-xl shadow-xs transition cursor-pointer"
                         >
                           <FileDown className="w-3.5 h-3.5" />
-                          <span>PDF Prescription</span>
+                          <span>📄 PDF Prescription</span>
                         </button>
                       </div>
 
@@ -615,65 +615,7 @@ export const ChotelalChatModal: React.FC<ChotelalChatModalProps> = ({
                         </div>
                       )}
 
-                      {/* 5. RECOMMENDED YOUTUBE VIDEO SECTION */}
-                      {msg.diagnosisData.recommendedVideo && (
-                        <div className="bg-slate-900 text-white rounded-2xl p-4 sm:p-5 space-y-3.5 shadow-md">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
-                              <span className="text-xs font-black uppercase tracking-wider text-yellow-300">
-                                🎥 RECOMMENDED VIDEO (TRUSTED AYURVEDIC CHANNEL)
-                              </span>
-                            </div>
-                            <span className="bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-                              {msg.diagnosisData.recommendedVideo.views}
-                            </span>
-                          </div>
-
-                          {/* YouTube Embed iFrame */}
-                          <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-black shadow-inner">
-                            <iframe
-                              className="w-full h-full"
-                              src={`https://www.youtube.com/embed/${msg.diagnosisData.recommendedVideo.video_id}?rel=0`}
-                              title={msg.diagnosisData.recommendedVideo.video_title}
-                              frameBorder="0"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                            />
-                          </div>
-
-                          {/* Video Details */}
-                          <div className="space-y-1">
-                            <h5 className="font-bold text-sm text-white line-clamp-2 leading-snug">
-                              {msg.diagnosisData.recommendedVideo.video_title}
-                            </h5>
-                            <p className="text-xs text-slate-300 flex items-center justify-between">
-                              <span className="font-bold text-orange-400">
-                                {msg.diagnosisData.recommendedVideo.channel_name}
-                              </span>
-                              <span className="text-[11px] text-slate-400">
-                                Avadhi: {msg.diagnosisData.recommendedVideo.duration}
-                              </span>
-                            </p>
-                          </div>
-
-                          {/* Why Recommended Quote */}
-                          <div className="bg-white/10 rounded-xl p-2.5 text-xs text-orange-100 italic border border-white/10">
-                            &ldquo;{msg.diagnosisData.recommendedVideo.why_recommended}&rdquo;
-                          </div>
-
-                          {/* Watch on YouTube direct button */}
-                          <a
-                            href={msg.diagnosisData.recommendedVideo.youtube_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center gap-1.5 w-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs py-2.5 rounded-xl transition"
-                          >
-                            <ExternalLink className="w-3.5 h-3.5" />
-                            <span>Watch directly on YouTube</span>
-                          </a>
-                        </div>
-                      )}
+                      {/* 5. RECOMMENDED YOUTUBE VIDEO SECTION — REMOVED PER REQUEST */}
 
                       {/* 6. Chotelal Ji Ki Salah */}
                       <div className="bg-amber-50 border border-amber-200 rounded-xl p-3.5 text-xs text-amber-950 flex items-start gap-2.5">

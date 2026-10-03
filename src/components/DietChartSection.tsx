@@ -15,6 +15,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { generateDietChartPDF } from '../lib/pdfGenerator';
+import { fetchWithFallback } from '../lib/api-config';
 
 interface MealPlanDay {
   day: string;
@@ -58,7 +59,7 @@ export const DietChartSection: React.FC<DietChartSectionProps> = ({
   const fetchDietChart = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('/api/diet-chart', {
+      const res = await fetchWithFallback('https://chotelalji-tts.sumitshrivas24.workers.dev/api/diet-chart', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ condition, category, symptoms, dosha }),

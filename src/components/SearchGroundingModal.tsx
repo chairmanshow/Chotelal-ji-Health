@@ -10,6 +10,7 @@ import {
   AlertCircle,
   FlaskConical,
 } from 'lucide-react';
+import { fetchWithFallback } from '../lib/api-config';
 
 interface SearchGroundingModalProps {
   isOpen: boolean;
@@ -49,7 +50,7 @@ export const SearchGroundingModal: React.FC<SearchGroundingModalProps> = ({
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('/api/ayurveda/search-research', {
+      const res = await fetchWithFallback('https://chotelalji-tts.sumitshrivas24.workers.dev/api/ayurveda/search-research', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: searchTerm }),

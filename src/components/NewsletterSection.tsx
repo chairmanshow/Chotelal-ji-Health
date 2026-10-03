@@ -34,7 +34,7 @@ export const NewsletterSection: React.FC = () => {
       }
 
       // 2. Server API fallback/sync to ensure Firestore persistence via admin SDK
-      await fetchWithFallback('/api/newsletter/subscribe', {
+      await fetchWithFallback('https://chotelalji-tts.sumitshrivas24.workers.dev/api/newsletter/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim().toLowerCase() }),

@@ -111,7 +111,7 @@ export async function speak(text: string): Promise<void> {
     // 2. Fallback to server /api/tts endpoint if needed
     if (!audioBlob) {
       try {
-        const srvRes = await fetch('/api/tts', {
+        const srvRes = await fetch('https://chotelalji-tts.sumitshrivas24.workers.dev/api/tts', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

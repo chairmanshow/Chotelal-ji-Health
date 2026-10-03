@@ -12,6 +12,7 @@ import {
   LocateFixed,
   Building2,
 } from 'lucide-react';
+import { fetchWithFallback } from '../lib/api-config';
 
 interface MapsGroundingModalProps {
   isOpen: boolean;
@@ -76,7 +77,7 @@ export const MapsGroundingModal: React.FC<MapsGroundingModalProps> = ({
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('/api/ayurveda/find-clinics', {
+      const res = await fetchWithFallback('https://chotelalji-tts.sumitshrivas24.workers.dev/api/ayurveda/find-clinics', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

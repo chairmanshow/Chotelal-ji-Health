@@ -167,7 +167,7 @@ export const DiagnosePage: React.FC = () => {
       let data: any = null;
 
       try {
-        const res = await fetchWithFallback('/api/ai-diagnose', {
+        const res = await fetchWithFallback('https://chotelalji-tts.sumitshrivas24.workers.dev/api/ai-diagnose', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
